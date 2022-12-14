@@ -1,0 +1,17 @@
+net: "/home/x306/caffe/xn/PENLU/neural/mnin/mnin_penlu_nodecay_xavier.prototxt"
+test_iter: 100
+test_interval: 500
+base_lr: 0.01
+lr_policy: "multistep"
+gamma: 0.1
+stepvalue: 60000
+stepvalue: 90000
+stepvalue: 110000
+display: 500
+max_iter: 120000
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 120000
+#snapshot_prefix: "xn/PENLU/snapshot/nin/shiyan/nin_relu_guass"
+snapshot_prefix: "xn/PENLU/snapshot/mnin/mnin_penlu_2_2study_nodecay"
+solver_mode: GPU

@@ -1,0 +1,2381 @@
+I0926 16:32:28.626428 11031 caffe.cpp:218] Using GPUs 0
+I0926 16:32:28.650241 11031 caffe.cpp:223] GPU 0: GeForce GTX 1080
+I0926 16:32:28.887372 11031 solver.cpp:44] Initializing solver from parameters: 
+test_iter: 100
+test_interval: 500
+base_lr: 0.001
+display: 100
+max_iter: 30000
+lr_policy: "multistep"
+gamma: 0.1
+momentum: 0.9
+weight_decay: 0.0001
+snapshot: 30000
+snapshot_prefix: "xn/PENLU/snapshot/resnet/res56_penlu_alpha2w_eta1w_gauss"
+solver_mode: GPU
+device_id: 0
+net: "/home/x306/caffe/xn/PENLU/neural/resnet/res56_penluBN_train_test.prototxt"
+train_state {
+  level: 0
+  stage: ""
+}
+stepvalue: 10000
+stepvalue: 20000
+I0926 16:32:28.887511 11031 solver.cpp:87] Creating training net from net file: /home/x306/caffe/xn/PENLU/neural/resnet/res56_penluBN_train_test.prototxt
+I0926 16:32:28.892746 11031 upgrade_proto.cpp:77] Attempting to upgrade batch norm layers using deprecated params: /home/x306/caffe/xn/PENLU/neural/resnet/res56_penluBN_train_test.prototxt
+I0926 16:32:28.892765 11031 upgrade_proto.cpp:80] Successfully upgraded batch norm layers using deprecated params.
+I0926 16:32:28.893050 11031 net.cpp:294] The NetState phase (0) differed from the phase (1) specified by a rule in layer Data1
+I0926 16:32:28.893201 11031 net.cpp:294] The NetState phase (0) differed from the phase (1) specified by a rule in layer Accuracy1
+I0926 16:32:28.894651 11031 net.cpp:51] Initializing net from parameters: 
+name: "resnet_cifar10"
+state {
+  phase: TRAIN
+  level: 0
+  stage: ""
+}
+layer {
+  name: "Data1"
+  type: "Data"
+  top: "Data1"
+  top: "Data2"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    mirror: true
+    crop_size: 28
+    mean_file: "/home/x306/caffe/xn/PENLU/data/cifar10/mean.binaryproto"
+  }
+  data_param {
+    source: "/home/x306/caffe/xn/PENLU/data/cifar10/cifar10_train_lmdb"
+    batch_size: 100
+    backend: LMDB
+  }
+}
+layer {
+  name: "Convolution1"
+  type: "Convolution"
+  bottom: "Data1"
+  top: "Convolution1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm1"
+  type: "BatchNorm"
+  bottom: "Convolution1"
+  top: "Convolution1"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale1"
+  type: "Scale"
+  bottom: "Convolution1"
+  top: "Convolution1"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "penlu1"
+  type: "PENLU"
+  bottom: "Convolution1"
+  top: "Convolution1"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu1"
+  type: "BatchNorm"
+  bottom: "Convolution1"
+  top: "Convolution1"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu1"
+  type: "Scale"
+  bottom: "Convolution1"
+  top: "Convolution1"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution2"
+  type: "Convolution"
+  bottom: "Convolution1"
+  top: "Convolution2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm2"
+  type: "BatchNorm"
+  bottom: "Convolution2"
+  top: "Convolution2"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale2"
+  type: "Scale"
+  bottom: "Convolution2"
+  top: "Convolution2"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "penlu2"
+  type: "PENLU"
+  bottom: "Convolution2"
+  top: "Convolution2"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu2"
+  type: "BatchNorm"
+  bottom: "Convolution2"
+  top: "Convolution2"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu2"
+  type: "Scale"
+  bottom: "Convolution2"
+  top: "Convolution2"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution3"
+  type: "Convolution"
+  bottom: "Convolution2"
+  top: "Convolution3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm3"
+  type: "BatchNorm"
+  bottom: "Convolution3"
+  top: "Convolution3"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale3"
+  type: "Scale"
+  bottom: "Convolution3"
+  top: "Convolution3"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise1"
+  type: "Eltwise"
+  bottom: "Convolution1"
+  bottom: "Convolution3"
+  top: "Eltwise1"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "penlu3"
+  type: "PENLU"
+  bottom: "Eltwise1"
+  top: "Eltwise1"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu3"
+  type: "BatchNorm"
+  bottom: "Eltwise1"
+  top: "Eltwise1"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu3"
+  type: "Scale"
+  bottom: "Eltwise1"
+  top: "Eltwise1"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution4"
+  type: "Convolution"
+  bottom: "Eltwise1"
+  top: "Convolution4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm4"
+  type: "BatchNorm"
+  bottom: "Convolution4"
+  top: "Convolution4"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale4"
+  type: "Scale"
+  bottom: "Convolution4"
+  top: "Convolution4"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "penlu4"
+  type: "PENLU"
+  bottom: "Convolution4"
+  top: "Convolution4"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu4"
+  type: "BatchNorm"
+  bottom: "Convolution4"
+  top: "Conv_penlu4"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu4"
+  type: "Scale"
+  bottom: "Conv_penlu4"
+  top: "Convolution4"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution5"
+  type: "Convolution"
+  bottom: "Convolution4"
+  top: "Convolution5"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm5"
+  type: "BatchNorm"
+  bottom: "Convolution5"
+  top: "Convolution5"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale5"
+  type: "Scale"
+  bottom: "Convolution5"
+  top: "Convolution5"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise2"
+  type: "Eltwise"
+  bottom: "Eltwise1"
+  bottom: "Convolution5"
+  top: "Eltwise2"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "penlu5"
+  type: "PENLU"
+  bottom: "Eltwise2"
+  top: "Eltwise2"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu5"
+  type: "BatchNorm"
+  bottom: "Eltwise2"
+  top: "Eltwise2"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu5"
+  type: "Scale"
+  bottom: "Eltwise2"
+  top: "Eltwise2"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution6"
+  type: "Convolution"
+  bottom: "Eltwise2"
+  top: "Convolution6"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm6"
+  type: "BatchNorm"
+  bottom: "Convolution6"
+  top: "Convolution6"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale6"
+  type: "Scale"
+  bottom: "Convolution6"
+  top: "Convolution6"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "penlu6"
+  type: "PENLU"
+  bottom: "Convolution6"
+  top: "Convolution6"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu6"
+  type: "BatchNorm"
+  bottom: "Convolution6"
+  top: "Convolution6"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu6"
+  type: "Scale"
+  bottom: "Convolution6"
+  top: "Convolution6"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution7"
+  type: "Convolution"
+  bottom: "Convolution6"
+  top: "Convolution7"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm7"
+  type: "BatchNorm"
+  bottom: "Convolution7"
+  top: "Convolution7"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale7"
+  type: "Scale"
+  bottom: "Convolution7"
+  top: "Convolution7"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise3"
+  type: "Eltwise"
+  bottom: "Eltwise2"
+  bottom: "Convolution7"
+  top: "Eltwise3"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "penlu7"
+  type: "PENLU"
+  bottom: "Eltwise3"
+  top: "Eltwise3"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu7"
+  type: "BatchNorm"
+  bottom: "Eltwise3"
+  top: "Eltwise3"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu7"
+  type: "Scale"
+  bottom: "Eltwise3"
+  top: "Eltwise3"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution8"
+  type: "Convolution"
+  bottom: "Eltwise3"
+  top: "Convolution8"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm8"
+  type: "BatchNorm"
+  bottom: "Convolution8"
+  top: "Convolution8"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale8"
+  type: "Scale"
+  bottom: "Convolution8"
+  top: "Convolution8"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "penlu8"
+  type: "PENLU"
+  bottom: "Convolution8"
+  top: "Convolution8"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu8"
+  type: "BatchNorm"
+  bottom: "Convolution8"
+  top: "Convolution8"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu8"
+  type: "Scale"
+  bottom: "Convolution8"
+  top: "Convolution8"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution9"
+  type: "Convolution"
+  bottom: "Convolution8"
+  top: "Convolution9"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm9"
+  type: "BatchNorm"
+  bottom: "Convolution9"
+  top: "Convolution9"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale9"
+  type: "Scale"
+  bottom: "Convolution9"
+  top: "Convolution9"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise4"
+  type: "Eltwise"
+  bottom: "Eltwise3"
+  bottom: "Convolution9"
+  top: "Eltwise4"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "penlu9"
+  type: "PENLU"
+  bottom: "Eltwise4"
+  top: "Eltwise4"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu9"
+  type: "BatchNorm"
+  bottom: "Eltwise4"
+  top: "Eltwise4"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu9"
+  type: "Scale"
+  bottom: "Eltwise4"
+  top: "Eltwise4"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution10"
+  type: "Convolution"
+  bottom: "Eltwise4"
+  top: "Convolution10"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm10"
+  type: "BatchNorm"
+  bottom: "Convolution10"
+  top: "Convolution10"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale10"
+  type: "Scale"
+  bottom: "Convolution10"
+  top: "Convolution10"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "penlu10"
+  type: "PENLU"
+  bottom: "Convolution10"
+  top: "Convolution10"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu10"
+  type: "BatchNorm"
+  bottom: "Convolution10"
+  top: "Convolution10"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu10"
+  type: "Scale"
+  bottom: "Convolution10"
+  top: "Convolution10"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution11"
+  type: "Convolution"
+  bottom: "Convolution10"
+  top: "Convolution11"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm11"
+  type: "BatchNorm"
+  bottom: "Convolution11"
+  top: "Convolution11"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale11"
+  type: "Scale"
+  bottom: "Convolution11"
+  top: "Convolution11"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise5"
+  type: "Eltwise"
+  bottom: "Eltwise4"
+  bottom: "Convolution11"
+  top: "Eltwise5"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "penlu11"
+  type: "PENLU"
+  bottom: "Eltwise5"
+  top: "Eltwise5"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu11"
+  type: "BatchNorm"
+  bottom: "Eltwise5"
+  top: "Eltwise5"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu11"
+  type: "Scale"
+  bottom: "Eltwise5"
+  top: "Eltwise5"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution12"
+  type: "Convolution"
+  bottom: "Eltwise5"
+  top: "Convolution12"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm12"
+  type: "BatchNorm"
+  bottom: "Convolution12"
+  top: "Convolution12"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale12"
+  type: "Scale"
+  bottom: "Convolution12"
+  top: "Convolution12"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "penlu12"
+  type: "PENLU"
+  bottom: "Convolution12"
+  top: "Convolution12"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu12"
+  type: "BatchNorm"
+  bottom: "Convolution12"
+  top: "Convolution12"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu12"
+  type: "Scale"
+  bottom: "Convolution12"
+  top: "Convolution12"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution13"
+  type: "Convolution"
+  bottom: "Convolution12"
+  top: "Convolution13"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm13"
+  type: "BatchNorm"
+  bottom: "Convolution13"
+  top: "Convolution13"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale13"
+  type: "Scale"
+  bottom: "Convolution13"
+  top: "Convolution13"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise6"
+  type: "Eltwise"
+  bottom: "Eltwise5"
+  bottom: "Convolution13"
+  top: "Eltwise6"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "penlu13"
+  type: "PENLU"
+  bottom: "Eltwise6"
+  top: "Eltwise6"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu13"
+  type: "BatchNorm"
+  bottom: "Eltwise6"
+  top: "Eltwise6"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu13"
+  type: "Scale"
+  bottom: "Eltwise6"
+  top: "Eltwisse6"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution14"
+  type: "Convolution"
+  bottom: "Eltwise6"
+  top: "Convolution14"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm14"
+  type: "BatchNorm"
+  bottom: "Convolution14"
+  top: "Convolution14"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale14"
+  type: "Scale"
+  bottom: "Convolution14"
+  top: "Convolution14"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "penlu14"
+  type: "PENLU"
+  bottom: "Convolution14"
+  top: "Convolution14"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu14"
+  type: "BatchNorm"
+  bottom: "Convolution14"
+  top: "Convolution14"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu14"
+  type: "Scale"
+  bottom: "Convolution14"
+  top: "Convolution14"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution15"
+  type: "Convolution"
+  bottom: "Convolution14"
+  top: "Convolution15"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm15"
+  type: "BatchNorm"
+  bottom: "Convolution15"
+  top: "Convolution15"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale15"
+  type: "Scale"
+  bottom: "Convolution15"
+  top: "Convolution15"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise7"
+  type: "Eltwise"
+  bottom: "Eltwise6"
+  bottom: "Convolution15"
+  top: "Eltwise7"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "penlu15"
+  type: "PENLU"
+  bottom: "Eltwise7"
+  top: "Eltwise7"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu15"
+  type: "BatchNorm"
+  bottom: "Eltwise7"
+  top: "Eltwise7"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu15"
+  type: "Scale"
+  bottom: "Eltwise7"
+  top: "Eltwise7"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution16"
+  type: "Convolution"
+  bottom: "Eltwise7"
+  top: "Convolution16"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm16"
+  type: "BatchNorm"
+  bottom: "Convolution16"
+  top: "Convolution16"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale16"
+  type: "Scale"
+  bottom: "Convolution16"
+  top: "Convolution16"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "penlu16"
+  type: "PENLU"
+  bottom: "Convolution16"
+  top: "Convolution16"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu16"
+  type: "BatchNorm"
+  bottom: "Convolution16"
+  top: "Convolution16"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu16"
+  type: "Scale"
+  bottom: "Convolution16"
+  top: "Convolution16"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution17"
+  type: "Convolution"
+  bottom: "Convolution16"
+  top: "Convolution17"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm17"
+  type: "BatchNorm"
+  bottom: "Convolution17"
+  top: "Convolution17"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale17"
+  type: "Scale"
+  bottom: "Convolution17"
+  top: "Convolution17"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise8"
+  type: "Eltwise"
+  bottom: "Eltwise7"
+  bottom: "Convolution17"
+  top: "Eltwise8"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "penlu17"
+  type: "PENLU"
+  bottom: "Eltwise8"
+  top: "Eltwise8"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "BatchNorm_penlu17"
+  type: "BatchNorm"
+  bottom: "Eltwise8"
+  top: "Eltwise8"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale_penlu17"
+  type: "Scale"
+  bottom: "Eltwise8"
+  top: "Eltwise8"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution18"
+  type: "Convolution"
+  bottom: "Eltwise8"
+  top: "Convolution18"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.118
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "BatchNorm18"
+  type: "BatchNorm"
+  bottom: "Convolution18"
+  top: "Convolution18"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  name: "Scale18"
+  type: "Scale"
+  bottom: "Convolution18"
+  top: "Convolution18"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "penlu18"
+  type: "PENLU"
+  bottom: "Convolution18"
+  top: "Convolution18"
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  penlu_param {
+    alpha_filler {
+      type: "constant"
+      value: 2
+    }
+    beta_filler {
+      type: "constant"
+      value: 1
+    }
+    eta_filler {
+I0926 16:32:28.895562 11031 layer_factory.hpp:77] Creating layer Data1
+I0926 16:32:28.895637 11031 db_lmdb.cpp:35] Opened lmdb /home/x306/caffe/xn/PENLU/data/cifar10/cifar10_train_lmdb
+I0926 16:32:28.895656 11031 net.cpp:84] Creating Layer Data1
+I0926 16:32:28.895661 11031 net.cpp:380] Data1 -> Data1
+I0926 16:32:28.895679 11031 net.cpp:380] Data1 -> Data2
+I0926 16:32:28.895689 11031 data_transformer.cpp:25] Loading mean file from: /home/x306/caffe/xn/PENLU/data/cifar10/mean.binaryproto
+I0926 16:32:28.897203 11031 data_layer.cpp:45] output data size: 100,3,28,28
+I0926 16:32:28.899588 11031 net.cpp:122] Setting up Data1
+I0926 16:32:28.899613 11031 net.cpp:129] Top shape: 100 3 28 28 (235200)
+I0926 16:32:28.899618 11031 net.cpp:129] Top shape: 100 (100)
+I0926 16:32:28.899621 11031 net.cpp:137] Memory required for data: 941200
+I0926 16:32:28.899627 11031 layer_factory.hpp:77] Creating layer Convolution1
+I0926 16:32:28.899648 11031 net.cpp:84] Creating Layer Convolution1
+I0926 16:32:28.899653 11031 net.cpp:406] Convolution1 <- Data1
+I0926 16:32:28.899663 11031 net.cpp:380] Convolution1 -> Convolution1
+I0926 16:32:29.076149 11031 net.cpp:122] Setting up Convolution1
+I0926 16:32:29.076174 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.076176 11031 net.cpp:137] Memory required for data: 5958800
+I0926 16:32:29.076191 11031 layer_factory.hpp:77] Creating layer BatchNorm1
+I0926 16:32:29.076212 11031 net.cpp:84] Creating Layer BatchNorm1
+I0926 16:32:29.076215 11031 net.cpp:406] BatchNorm1 <- Convolution1
+I0926 16:32:29.076232 11031 net.cpp:367] BatchNorm1 -> Convolution1 (in-place)
+I0926 16:32:29.076373 11031 net.cpp:122] Setting up BatchNorm1
+I0926 16:32:29.076380 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.076381 11031 net.cpp:137] Memory required for data: 10976400
+I0926 16:32:29.076388 11031 layer_factory.hpp:77] Creating layer Scale1
+I0926 16:32:29.076408 11031 net.cpp:84] Creating Layer Scale1
+I0926 16:32:29.076411 11031 net.cpp:406] Scale1 <- Convolution1
+I0926 16:32:29.076416 11031 net.cpp:367] Scale1 -> Convolution1 (in-place)
+I0926 16:32:29.076467 11031 layer_factory.hpp:77] Creating layer Scale1
+I0926 16:32:29.076607 11031 net.cpp:122] Setting up Scale1
+I0926 16:32:29.076613 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.076616 11031 net.cpp:137] Memory required for data: 15994000
+I0926 16:32:29.076620 11031 layer_factory.hpp:77] Creating layer penlu1
+I0926 16:32:29.076627 11031 net.cpp:84] Creating Layer penlu1
+I0926 16:32:29.076629 11031 net.cpp:406] penlu1 <- Convolution1
+I0926 16:32:29.076643 11031 net.cpp:367] penlu1 -> Convolution1 (in-place)
+I0926 16:32:29.077262 11031 net.cpp:122] Setting up penlu1
+I0926 16:32:29.077271 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.077275 11031 net.cpp:137] Memory required for data: 21011600
+I0926 16:32:29.077281 11031 layer_factory.hpp:77] Creating layer BatchNorm_penlu1
+I0926 16:32:29.077286 11031 net.cpp:84] Creating Layer BatchNorm_penlu1
+I0926 16:32:29.077288 11031 net.cpp:406] BatchNorm_penlu1 <- Convolution1
+I0926 16:32:29.077302 11031 net.cpp:367] BatchNorm_penlu1 -> Convolution1 (in-place)
+I0926 16:32:29.077453 11031 net.cpp:122] Setting up BatchNorm_penlu1
+I0926 16:32:29.077458 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.077461 11031 net.cpp:137] Memory required for data: 26029200
+I0926 16:32:29.077464 11031 layer_factory.hpp:77] Creating layer Scale_penlu1
+I0926 16:32:29.077469 11031 net.cpp:84] Creating Layer Scale_penlu1
+I0926 16:32:29.077471 11031 net.cpp:406] Scale_penlu1 <- Convolution1
+I0926 16:32:29.077476 11031 net.cpp:367] Scale_penlu1 -> Convolution1 (in-place)
+I0926 16:32:29.077533 11031 layer_factory.hpp:77] Creating layer Scale_penlu1
+I0926 16:32:29.077651 11031 net.cpp:122] Setting up Scale_penlu1
+I0926 16:32:29.077656 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.077657 11031 net.cpp:137] Memory required for data: 31046800
+I0926 16:32:29.077661 11031 layer_factory.hpp:77] Creating layer Convolution1_Scale_penlu1_0_split
+I0926 16:32:29.077669 11031 net.cpp:84] Creating Layer Convolution1_Scale_penlu1_0_split
+I0926 16:32:29.077672 11031 net.cpp:406] Convolution1_Scale_penlu1_0_split <- Convolution1
+I0926 16:32:29.077674 11031 net.cpp:380] Convolution1_Scale_penlu1_0_split -> Convolution1_Scale_penlu1_0_split_0
+I0926 16:32:29.077689 11031 net.cpp:380] Convolution1_Scale_penlu1_0_split -> Convolution1_Scale_penlu1_0_split_1
+I0926 16:32:29.077744 11031 net.cpp:122] Setting up Convolution1_Scale_penlu1_0_split
+I0926 16:32:29.077749 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.077752 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.077769 11031 net.cpp:137] Memory required for data: 41082000
+I0926 16:32:29.077771 11031 layer_factory.hpp:77] Creating layer Convolution2
+I0926 16:32:29.077788 11031 net.cpp:84] Creating Layer Convolution2
+I0926 16:32:29.077790 11031 net.cpp:406] Convolution2 <- Convolution1_Scale_penlu1_0_split_0
+I0926 16:32:29.077805 11031 net.cpp:380] Convolution2 -> Convolution2
+I0926 16:32:29.078665 11031 net.cpp:122] Setting up Convolution2
+I0926 16:32:29.078675 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.078678 11031 net.cpp:137] Memory required for data: 46099600
+I0926 16:32:29.078685 11031 layer_factory.hpp:77] Creating layer BatchNorm2
+I0926 16:32:29.078691 11031 net.cpp:84] Creating Layer BatchNorm2
+I0926 16:32:29.078692 11031 net.cpp:406] BatchNorm2 <- Convolution2
+I0926 16:32:29.078707 11031 net.cpp:367] BatchNorm2 -> Convolution2 (in-place)
+I0926 16:32:29.078848 11031 net.cpp:122] Setting up BatchNorm2
+I0926 16:32:29.078853 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.078855 11031 net.cpp:137] Memory required for data: 51117200
+I0926 16:32:29.078860 11031 layer_factory.hpp:77] Creating layer Scale2
+I0926 16:32:29.078864 11031 net.cpp:84] Creating Layer Scale2
+I0926 16:32:29.078867 11031 net.cpp:406] Scale2 <- Convolution2
+I0926 16:32:29.078871 11031 net.cpp:367] Scale2 -> Convolution2 (in-place)
+I0926 16:32:29.078893 11031 layer_factory.hpp:77] Creating layer Scale2
+I0926 16:32:29.078995 11031 net.cpp:122] Setting up Scale2
+I0926 16:32:29.079001 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.079004 11031 net.cpp:137] Memory required for data: 56134800
+I0926 16:32:29.079007 11031 layer_factory.hpp:77] Creating layer penlu2
+I0926 16:32:29.079012 11031 net.cpp:84] Creating Layer penlu2
+I0926 16:32:29.079016 11031 net.cpp:406] penlu2 <- Convolution2
+I0926 16:32:29.079020 11031 net.cpp:367] penlu2 -> Convolution2 (in-place)
+I0926 16:32:29.079130 11031 net.cpp:122] Setting up penlu2
+I0926 16:32:29.079136 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.079139 11031 net.cpp:137] Memory required for data: 61152400
+I0926 16:32:29.079144 11031 layer_factory.hpp:77] Creating layer BatchNorm_penlu2
+I0926 16:32:29.079149 11031 net.cpp:84] Creating Layer BatchNorm_penlu2
+I0926 16:32:29.079151 11031 net.cpp:406] BatchNorm_penlu2 <- Convolution2
+I0926 16:32:29.079155 11031 net.cpp:367] BatchNorm_penlu2 -> Convolution2 (in-place)
+I0926 16:32:29.079269 11031 net.cpp:122] Setting up BatchNorm_penlu2
+I0926 16:32:29.079274 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.079277 11031 net.cpp:137] Memory required for data: 66170000
+I0926 16:32:29.079280 11031 layer_factory.hpp:77] Creating layer Scale_penlu2
+I0926 16:32:29.079285 11031 net.cpp:84] Creating Layer Scale_penlu2
+I0926 16:32:29.079288 11031 net.cpp:406] Scale_penlu2 <- Convolution2
+I0926 16:32:29.079290 11031 net.cpp:367] Scale_penlu2 -> Convolution2 (in-place)
+I0926 16:32:29.079313 11031 layer_factory.hpp:77] Creating layer Scale_penlu2
+I0926 16:32:29.079383 11031 net.cpp:122] Setting up Scale_penlu2
+I0926 16:32:29.079388 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.079391 11031 net.cpp:137] Memory required for data: 71187600
+I0926 16:32:29.079394 11031 layer_factory.hpp:77] Creating layer Convolution3
+I0926 16:32:29.079401 11031 net.cpp:84] Creating Layer Convolution3
+I0926 16:32:29.079403 11031 net.cpp:406] Convolution3 <- Convolution2
+I0926 16:32:29.079407 11031 net.cpp:380] Convolution3 -> Convolution3
+I0926 16:32:29.080253 11031 net.cpp:122] Setting up Convolution3
+I0926 16:32:29.080262 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.080266 11031 net.cpp:137] Memory required for data: 76205200
+I0926 16:32:29.080271 11031 layer_factory.hpp:77] Creating layer BatchNorm3
+I0926 16:32:29.080276 11031 net.cpp:84] Creating Layer BatchNorm3
+I0926 16:32:29.080278 11031 net.cpp:406] BatchNorm3 <- Convolution3
+I0926 16:32:29.080282 11031 net.cpp:367] BatchNorm3 -> Convolution3 (in-place)
+I0926 16:32:29.080401 11031 net.cpp:122] Setting up BatchNorm3
+I0926 16:32:29.080406 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.080410 11031 net.cpp:137] Memory required for data: 81222800
+I0926 16:32:29.080416 11031 layer_factory.hpp:77] Creating layer Scale3
+I0926 16:32:29.080422 11031 net.cpp:84] Creating Layer Scale3
+I0926 16:32:29.080425 11031 net.cpp:406] Scale3 <- Convolution3
+I0926 16:32:29.080430 11031 net.cpp:367] Scale3 -> Convolution3 (in-place)
+I0926 16:32:29.080453 11031 layer_factory.hpp:77] Creating layer Scale3
+I0926 16:32:29.080530 11031 net.cpp:122] Setting up Scale3
+I0926 16:32:29.080536 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.080538 11031 net.cpp:137] Memory required for data: 86240400
+I0926 16:32:29.080543 11031 layer_factory.hpp:77] Creating layer Eltwise1
+I0926 16:32:29.080548 11031 net.cpp:84] Creating Layer Eltwise1
+I0926 16:32:29.080556 11031 net.cpp:406] Eltwise1 <- Convolution1_Scale_penlu1_0_split_1
+I0926 16:32:29.080559 11031 net.cpp:406] Eltwise1 <- Convolution3
+I0926 16:32:29.080564 11031 net.cpp:380] Eltwise1 -> Eltwise1
+I0926 16:32:29.080581 11031 net.cpp:122] Setting up Eltwise1
+I0926 16:32:29.080586 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.080588 11031 net.cpp:137] Memory required for data: 91258000
+I0926 16:32:29.080590 11031 layer_factory.hpp:77] Creating layer penlu3
+I0926 16:32:29.080595 11031 net.cpp:84] Creating Layer penlu3
+I0926 16:32:29.080597 11031 net.cpp:406] penlu3 <- Eltwise1
+I0926 16:32:29.080602 11031 net.cpp:367] penlu3 -> Eltwise1 (in-place)
+I0926 16:32:29.080701 11031 net.cpp:122] Setting up penlu3
+I0926 16:32:29.080706 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.080708 11031 net.cpp:137] Memory required for data: 96275600
+I0926 16:32:29.080713 11031 layer_factory.hpp:77] Creating layer BatchNorm_penlu3
+I0926 16:32:29.080718 11031 net.cpp:84] Creating Layer BatchNorm_penlu3
+I0926 16:32:29.080730 11031 net.cpp:406] BatchNorm_penlu3 <- Eltwise1
+I0926 16:32:29.080734 11031 net.cpp:367] BatchNorm_penlu3 -> Eltwise1 (in-place)
+I0926 16:32:29.080879 11031 net.cpp:122] Setting up BatchNorm_penlu3
+I0926 16:32:29.080884 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.080888 11031 net.cpp:137] Memory required for data: 101293200
+I0926 16:32:29.080902 11031 layer_factory.hpp:77] Creating layer Scale_penlu3
+I0926 16:32:29.080906 11031 net.cpp:84] Creating Layer Scale_penlu3
+I0926 16:32:29.080909 11031 net.cpp:406] Scale_penlu3 <- Eltwise1
+I0926 16:32:29.080912 11031 net.cpp:367] Scale_penlu3 -> Eltwise1 (in-place)
+I0926 16:32:29.080946 11031 layer_factory.hpp:77] Creating layer Scale_penlu3
+I0926 16:32:29.081037 11031 net.cpp:122] Setting up Scale_penlu3
+I0926 16:32:29.081041 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.081044 11031 net.cpp:137] Memory required for data: 106310800
+I0926 16:32:29.081058 11031 layer_factory.hpp:77] Creating layer Eltwise1_Scale_penlu3_0_split
+I0926 16:32:29.081063 11031 net.cpp:84] Creating Layer Eltwise1_Scale_penlu3_0_split
+I0926 16:32:29.081065 11031 net.cpp:406] Eltwise1_Scale_penlu3_0_split <- Eltwise1
+I0926 16:32:29.081068 11031 net.cpp:380] Eltwise1_Scale_penlu3_0_split -> Eltwise1_Scale_penlu3_0_split_0
+I0926 16:32:29.081074 11031 net.cpp:380] Eltwise1_Scale_penlu3_0_split -> Eltwise1_Scale_penlu3_0_split_1
+I0926 16:32:29.081097 11031 net.cpp:122] Setting up Eltwise1_Scale_penlu3_0_split
+I0926 16:32:29.081101 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.081105 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.081107 11031 net.cpp:137] Memory required for data: 116346000
+I0926 16:32:29.081110 11031 layer_factory.hpp:77] Creating layer Convolution4
+I0926 16:32:29.081117 11031 net.cpp:84] Creating Layer Convolution4
+I0926 16:32:29.081121 11031 net.cpp:406] Convolution4 <- Eltwise1_Scale_penlu3_0_split_0
+I0926 16:32:29.081125 11031 net.cpp:380] Convolution4 -> Convolution4
+I0926 16:32:29.081990 11031 net.cpp:122] Setting up Convolution4
+I0926 16:32:29.082000 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.082003 11031 net.cpp:137] Memory required for data: 121363600
+I0926 16:32:29.082007 11031 layer_factory.hpp:77] Creating layer BatchNorm4
+I0926 16:32:29.082015 11031 net.cpp:84] Creating Layer BatchNorm4
+I0926 16:32:29.082017 11031 net.cpp:406] BatchNorm4 <- Convolution4
+I0926 16:32:29.082021 11031 net.cpp:367] BatchNorm4 -> Convolution4 (in-place)
+I0926 16:32:29.082147 11031 net.cpp:122] Setting up BatchNorm4
+I0926 16:32:29.082152 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.082155 11031 net.cpp:137] Memory required for data: 126381200
+I0926 16:32:29.082160 11031 layer_factory.hpp:77] Creating layer Scale4
+I0926 16:32:29.082166 11031 net.cpp:84] Creating Layer Scale4
+I0926 16:32:29.082170 11031 net.cpp:406] Scale4 <- Convolution4
+I0926 16:32:29.082172 11031 net.cpp:367] Scale4 -> Convolution4 (in-place)
+I0926 16:32:29.082206 11031 layer_factory.hpp:77] Creating layer Scale4
+I0926 16:32:29.082284 11031 net.cpp:122] Setting up Scale4
+I0926 16:32:29.082289 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.082293 11031 net.cpp:137] Memory required for data: 131398800
+I0926 16:32:29.082296 11031 layer_factory.hpp:77] Creating layer penlu4
+I0926 16:32:29.082303 11031 net.cpp:84] Creating Layer penlu4
+I0926 16:32:29.082305 11031 net.cpp:406] penlu4 <- Convolution4
+I0926 16:32:29.082310 11031 net.cpp:367] penlu4 -> Convolution4 (in-place)
+I0926 16:32:29.082413 11031 net.cpp:122] Setting up penlu4
+I0926 16:32:29.082418 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.082422 11031 net.cpp:137] Memory required for data: 136416400
+I0926 16:32:29.082425 11031 layer_factory.hpp:77] Creating layer BatchNorm_penlu4
+I0926 16:32:29.082430 11031 net.cpp:84] Creating Layer BatchNorm_penlu4
+I0926 16:32:29.082433 11031 net.cpp:406] BatchNorm_penlu4 <- Convolution4
+I0926 16:32:29.082437 11031 net.cpp:380] BatchNorm_penlu4 -> Conv_penlu4
+I0926 16:32:29.082566 11031 net.cpp:122] Setting up BatchNorm_penlu4
+I0926 16:32:29.082571 11031 net.cpp:129] Top shape: 100 16 28 28 (1254400)
+I0926 16:32:29.082573 11031 net.cpp:137] Memory required for data: 141434000
+I0926 16:32:29.082578 11031 layer_factory.hpp:77] Creating layer Scale_penlu4
+I0926 16:32:29.082583 11031 net.cpp:84] Creating Layer Scale_penlu4
+I0926 16:32:29.082587 11031 net.cpp:406] Scale_penlu4 <- Conv_penlu4
+F0926 16:32:29.082592 11031 net.cpp:375] Top blob 'Convolution4' produced by multiple sources.
+*** Check failure stack trace: ***
+    @     0x7ffab8a4fdaa  (unknown)
+    @     0x7ffab8a4fce4  (unknown)
+    @     0x7ffab8a4f6e6  (unknown)
+    @     0x7ffab8a52687  (unknown)
+    @     0x7ffab91e2a85  caffe::Net<>::AppendTop()
+    @     0x7ffab91ecc3b  caffe::Net<>::Init()
+    @     0x7ffab91eecc2  caffe::Net<>::Net()
+    @     0x7ffab91c7970  caffe::Solver<>::InitTrainNet()
+    @     0x7ffab91c88c3  caffe::Solver<>::Init()
+    @     0x7ffab91c8b9f  caffe::Solver<>::Solver()
+    @     0x7ffab90719d1  caffe::Creator_SGDSolver<>()
+    @           0x40f18e  caffe::SolverRegistry<>::CreateSolver()
+    @           0x40827d  train()
+    @           0x405bec  main
+    @     0x7ffab72aff45  (unknown)
+    @           0x4064f3  (unknown)
+    @              (nil)  (unknown)

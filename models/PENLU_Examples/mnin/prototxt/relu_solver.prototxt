@@ -1,0 +1,16 @@
+net: "/home/x306/caffe/xn/PENLU/neural/mnin/mnin_relu_gauss.prototxt"
+test_iter: 100
+test_interval: 500
+base_lr: 0.01
+lr_policy: "multistep"
+gamma: 0.1
+#stepvalue: 20000
+stepvalue: 80000
+display: 200
+max_iter: 120000
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 120000
+#snapshot_prefix: "xn/PENLU/snapshot/nin/shiyan/nin_relu_guass"
+snapshot_prefix: "xn/PENLU/snapshot/mnin/mnin_relu_gauss"
+solver_mode: GPU

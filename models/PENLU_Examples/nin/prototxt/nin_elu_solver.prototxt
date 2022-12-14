@@ -1,0 +1,16 @@
+net: "/home/x306/caffe/xn/PENLU/neural/nin/nin_elu_gauss.prototxt"
+test_iter: 79
+test_interval: 2000
+base_lr: 0.01
+lr_policy: "multistep"
+gamma: 0.1
+#stepvalue: 20000
+stepvalue: 90000
+display: 2000
+max_iter: 120000
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 120000
+#snapshot_prefix: "xn/PENLU/snapshot/nin/shiyan/nin_alpha0.25_eta0.9_penlud_guass"
+snapshot_prefix: "xn/PENLU/snapshot/nin/nin_elu_alpha0.25_gauss"
+solver_mode: GPU
