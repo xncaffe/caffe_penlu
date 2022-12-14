@@ -15,8 +15,7 @@ How to use our code?
 5. Compile caffe according to the official caffe compilation method, Please refer to: [Caffe | Installation (berkeleyvision.org)](http://caffe.berkeleyvision.org/installation.html#compilation)
 6. We provide some examples of our use of PENLU in network structures. For detailed network structure, please refer to *caffe_penlu/models*.
 7. The network structure used by navel orange recognition is located in *caffe_penlu/navel_orange/*
-8. The image data used for navel orange identification is stored in Baidu cloud disk, click the link to download: [https://pan.baidu.com/s/1dX5pTA0oDptGVeRSvukbhw](https://pan.baidu.com/s/1dX5pTA0oDptGVeRSvukbhw), verification code: 5dpj
-
+8. The image data used for navel orange identification is stored in CSDN, click the link to download: [https://download.csdn.net/download/xunan003/87283623?spm=1001.2014.3001.5503](https://download.csdn.net/download/xunan003/87283623?spm=1001.2014.3001.5503)
 
 Regarding the 3rd method of use, you need to add the registration part of the penlu layer to caffe.proto in caffe, as follows:
 
@@ -57,3 +56,5 @@ message PENLUParameter {
   optional bool channel_shared = 4 [default = false];
 }
 ```
+
+![1671013776227](image/README/1671013776227.png) ![1671013825257](image/README/1671013825257.png) ![1671013837550](image/README/1671013837550.png)
